@@ -40,11 +40,12 @@ def _dynamic_dict(example, src_field, tgt_field):
     Returns:
         torchtext.data.Vocab and ``example``, changed as described.
     """
-
     src = src_field.tokenize(example["src"])
     # make a small vocab containing just the tokens in the source sequence
     unk = src_field.unk_token
     pad = src_field.pad_token
+    #print('unk=',unk,'pad=',pad)
+    #exit(0)
     src_ex_vocab = Vocab(Counter(src), specials=[unk, pad])
     unk_idx = src_ex_vocab.stoi[unk]
     # Map source tokens to indices in the dynamic dict.
@@ -132,6 +133,8 @@ class Dataset(TorchtextDataset):
                 self.src_vocabs.append(src_ex_vocab)
             ex_fields = {k: [(k, v)] for k, v in fields.items() if
                          k in ex_dict}
+            #print(ex_fields['src'][0][1])
+            #exit()
             ex = Example.fromdict(ex_dict, ex_fields)
             examples.append(ex)
 
@@ -140,7 +143,6 @@ class Dataset(TorchtextDataset):
         for _, nf_list in ex_fields.items():
             assert len(nf_list) == 1
             fields.append(nf_list[0])
-
         super(Dataset, self).__init__(examples, fields, filter_pred)
 
     def __getattr__(self, attr):

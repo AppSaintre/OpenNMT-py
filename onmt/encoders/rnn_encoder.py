@@ -27,7 +27,6 @@ class RNNEncoder(EncoderBase):
                  use_bridge=False):
         super(RNNEncoder, self).__init__()
         assert embeddings is not None
-
         num_directions = 2 if bidirectional else 1
         assert hidden_size % num_directions == 0
         hidden_size = hidden_size // num_directions

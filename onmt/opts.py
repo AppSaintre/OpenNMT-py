@@ -1,4 +1,3 @@
-""" Implementation of all available options """
 from __future__ import print_function
 
 import configargparse
@@ -70,7 +69,7 @@ def model_opts(parser):
               choices=['fp32', 'fp16'],
               help='Data type of the model.')
 
-    group.add('--encoder_type', '-encoder_type', type=str, default='rnn',
+    group.add('--encoder_type', '-encoder_type', type=str, default='brnn',
               choices=['rnn', 'brnn', 'ggnn', 'mean', 'transformer', 'cnn'],
               help="Type of encoder layer to use. Non-RNN layers "
                    "are experimental. Options are "

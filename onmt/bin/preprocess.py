@@ -57,7 +57,6 @@ def process_one_shard(corpus_params, params):
     align_data = {"reader": align_reader, "data": align_shard, "dir": None}
     _readers, _data, _dir = inputters.Dataset.config(
         [('src', src_data), ('tgt', tgt_data), ('align', align_data)])
-
     dataset = inputters.Dataset(
         fields, readers=_readers, data=_data, dirs=_dir,
         sort_key=inputters.str2sortkey[opt.data_type],
@@ -191,10 +190,9 @@ def build_save_dataset(corpus_type, fields, src_reader, tgt_reader,
             for i, (ss, ts, a_s) in enumerate(
                     zip(src_shards, tgt_shards, align_shards)):
                 yield (i, (ss, ts, a_s, maybe_id, filter_pred))
-
+    
     shard_iter = shard_iterator(srcs, tgts, ids, aligns, existing_shards,
                                 existing_fields, corpus_type, opt)
-
     with Pool(opt.num_threads) as p:
         dataset_params = (corpus_type, fields, src_reader, tgt_reader,
                           align_reader, opt, existing_fields,
@@ -239,7 +237,8 @@ def count_features(path):
     """
     with codecs.open(path, "r", "utf-8") as f:
         first_tok = f.readline().split(None, 1)[0]
-        return len(first_tok.split(u"￨")) - 1
+        nf = len(first_tok.split(u"￨")) - 1     
+        return nf
 
 
 def preprocess(opt):
@@ -258,7 +257,6 @@ def preprocess(opt):
         tgt_nfeats += count_features(tgt)  # tgt always text so far
     logger.info(" * number of source features: %d." % src_nfeats)
     logger.info(" * number of target features: %d." % tgt_nfeats)
-
     logger.info("Building `Fields` object...")
     fields = inputters.get_fields(
         opt.data_type,
